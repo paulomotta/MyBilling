@@ -10,6 +10,7 @@ import java.util.Date;
 public class ClientBilling {
 
     private Date initialDate;
+    private static final int CYCLE_SIZE = 30;
 
     public ClientBilling(Date initialDate) {
         this.initialDate = initialDate;
@@ -30,42 +31,29 @@ public class ClientBilling {
         Calendar qryCal = Calendar.getInstance();
         qryCal.setTime(queryDate);
 
-        int iniMonth = iniCal.get(Calendar.MONTH);
-        int qryMonth = qryCal.get(Calendar.MONTH);
-
-        System.out.println("iniMonth=" + iniMonth);
-        System.out.println("qryMonth=" + qryMonth);
-
-        int diffDays = diffDays(localIniDate, queryDate);
+        int diffDays = diffDays(iniCal, qryCal);
         System.out.println(diffDays);
 
-        if (diffDays > 30) {
-            iniCal.add(Calendar.MONTH, (diffDays/30));
+        if (diffDays > CYCLE_SIZE) {
+            iniCal.add(Calendar.MONTH, (diffDays/CYCLE_SIZE));
             int tmpMonth = iniCal.get(Calendar.MONTH);
             System.out.println("tmpMonth=" + tmpMonth);
         }
         Date ini = iniCal.getTime();
 
-        iniCal.add(Calendar.DAY_OF_MONTH, 30);
+        iniCal.add(Calendar.DAY_OF_MONTH, CYCLE_SIZE);
         Date end = iniCal.getTime();
         return new BillingCycle(ini, end);
     }
 
-    public static int diffDays(Date d1, Date d2) {
-        Calendar iniCal = Calendar.getInstance();
-        iniCal.setTime(d1);
-
-        Calendar qryCal = Calendar.getInstance();
-        qryCal.setTime(d2);
-
+    public static int diffDays(Calendar iniCal, Calendar qryCal) {
+        
         int d1Month = iniCal.get(Calendar.DAY_OF_YEAR);
         System.out.println("d1Month =" + d1Month);
         int d2Month = qryCal.get(Calendar.DAY_OF_YEAR);
         System.out.println("d2Month =" + d2Month);
 
-        int result = Math.abs(d1Month - d2Month);
-
-        return result;
+        return Math.abs(d1Month - d2Month);
     }
 
     /**
