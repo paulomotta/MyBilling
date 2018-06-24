@@ -314,4 +314,44 @@ public class ClientBillingTest {
         assertEquals(expResult.getStart(), result.getStart());
         assertEquals(expResult.getEnd(), result.getEnd());
     }
+    
+    /**
+     * Given a date 
+     * When it is the same as the initial
+     * Then return a billing cycle
+     */
+    @Test
+    public void testBillingCycleSameDay() throws ParseException {
+        System.out.println("testBillingCycleSameDay");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("15-02-2018");
+        Date initial = sdf.parse("15-02-2018");
+        Date start = sdf.parse("15-02-2018");
+        Date end = sdf.parse("17-03-2018");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
+    
+    /**
+     * Given a date 
+     * When it is an invalid date
+     * Then return a billing cycle based on the lenient property of the Calendar
+     */
+    @Test
+    public void testBillingCycleInvalidQryDay() throws ParseException {
+        System.out.println("testBillingCycleInvalidQryDay");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("30-02-2018");
+        Date initial = sdf.parse("15-02-2018");
+        Date start = sdf.parse("15-02-2018");
+        Date end = sdf.parse("17-03-2018");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
 }
