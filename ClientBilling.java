@@ -2,6 +2,7 @@ package my.billing;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -47,13 +48,18 @@ public class ClientBilling {
     }
 
     public static int diffDays(Calendar iniCal, Calendar qryCal) {
-        
-        int d1Month = iniCal.get(Calendar.DAY_OF_YEAR);
-        System.out.println("d1Month =" + d1Month);
-        int d2Month = qryCal.get(Calendar.DAY_OF_YEAR);
-        System.out.println("d2Month =" + d2Month);
+        int yearIni = iniCal.get(Calendar.YEAR);
+        int yearQry = qryCal.get(Calendar.YEAR);
 
-        return Math.abs(d1Month - d2Month);
+        int yearDiff = Math.abs(yearQry - yearIni);
+        if (yearDiff > 0) {
+            yearDiff *= 365;
+        }
+
+        int dayIni = iniCal.get(Calendar.DAY_OF_YEAR);
+        int dayQry = qryCal.get(Calendar.DAY_OF_YEAR);
+
+        return Math.abs(dayIni - dayQry) + yearDiff;
     }
 
     /**

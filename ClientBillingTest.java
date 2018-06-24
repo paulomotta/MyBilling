@@ -2,6 +2,7 @@ package my.billing;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import org.junit.After;
 import org.junit.Before;
@@ -184,6 +185,71 @@ public class ClientBillingTest {
         assertEquals(expResult.getStart(), result.getStart());
         assertEquals(expResult.getEnd(), result.getEnd());
     }
+
+    /**
+     * Given two dates 
+     * When there is 1 day difference
+     * Then return 1
+     */
+    @Test
+    public void testDiffDays1Day() throws ParseException {
+        System.out.println("testDiffDays1Day");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date initial = sdf.parse("28-03-2018");
+        Date queryDate = sdf.parse("29-03-2018");
+        
+        Calendar iniCal = Calendar.getInstance();
+        iniCal.setTime(initial);
+
+        Calendar qryCal = Calendar.getInstance();
+        qryCal.setTime(queryDate);
+        
+        int expResult = 1;
+        int result = ClientBilling.diffDays(iniCal, qryCal);
+        assertEquals(expResult, result);
+    }
     
-    
+    /**
+     * Given two dates 
+     * When there is 365 day difference
+     * Then return 365     */
+    @Test
+    public void testDiffDays365Day() throws ParseException {
+        System.out.println("testDiffDays365Day");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date initial = sdf.parse("29-03-2017");
+        Date queryDate = sdf.parse("29-03-2018");
+        
+        Calendar iniCal = Calendar.getInstance();
+        iniCal.setTime(initial);
+
+        Calendar qryCal = Calendar.getInstance();
+        qryCal.setTime(queryDate);
+        
+        int expResult = 365;
+        int result = ClientBilling.diffDays(iniCal, qryCal);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Given two dates 
+     * When there is 366 day difference due to leap
+     * Then return 366     */
+    @Test
+    public void testDiffDays366Day() throws ParseException {
+        System.out.println("testDiffDays366Day");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date initial = sdf.parse("29-03-2019");
+        Date queryDate = sdf.parse("29-03-2020");
+        
+        Calendar iniCal = Calendar.getInstance();
+        iniCal.setTime(initial);
+
+        Calendar qryCal = Calendar.getInstance();
+        qryCal.setTime(queryDate);
+        
+        int expResult = 366;
+        int result = ClientBilling.diffDays(iniCal, qryCal);
+        assertEquals(expResult, result);
+    }
 }
