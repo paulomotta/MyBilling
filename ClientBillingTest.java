@@ -252,4 +252,66 @@ public class ClientBillingTest {
         int result = ClientBilling.diffDays(iniCal, qryCal);
         assertEquals(expResult, result);
     }
+    
+    /**
+     * Given two dates 
+     * When there is less than a year of day difference
+     * Then return 366     */
+    @Test
+    public void testDiffDaysLTYear() throws ParseException {
+        System.out.println("testDiffDaysLTYear");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("14-01-2019");
+        Date initial = sdf.parse("15-02-2018");
+        
+        Calendar iniCal = Calendar.getInstance();
+        iniCal.setTime(initial);
+
+        Calendar qryCal = Calendar.getInstance();
+        qryCal.setTime(queryDate);
+        
+        int expResult = 333;
+        int result = ClientBilling.diffDays(iniCal, qryCal);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Given a date 
+     * When it changes the year
+     * Then return a billing cycle
+     */
+    @Test
+    public void testBillingCycleWhenYearChanges() throws ParseException {
+        System.out.println("testBillingCycleWhenYearChanges");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("29-01-2019");
+        Date initial = sdf.parse("15-02-2018");
+        Date start = sdf.parse("15-01-2019");
+        Date end = sdf.parse("14-02-2019");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
+
+    /**
+     * Given a date 
+     * When it changes the year
+     * Then return a billing cycle
+     */
+    @Test
+    public void testBillingCycleWhenYearChangesFirstCycle() throws ParseException {
+        System.out.println("testBillingCycleWhenYearChangesFirstCycle");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("10-01-2019");
+        Date initial = sdf.parse("15-02-2018");
+        Date start = sdf.parse("15-12-2018");
+        Date end = sdf.parse("14-01-2019");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
 }

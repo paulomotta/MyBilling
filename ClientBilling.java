@@ -22,10 +22,12 @@ public class ClientBilling {
     }
 
     public BillingCycle getBillingCycle(Date queryDate) {
-        if (queryDate.before(initialDate)) return null;
-        
+        if (queryDate.before(initialDate)) {
+            return null;
+        }
+
         Date localIniDate = (Date) initialDate.clone();
-        
+
         Calendar iniCal = Calendar.getInstance();
         iniCal.setTime(localIniDate);
 
@@ -36,7 +38,9 @@ public class ClientBilling {
         System.out.println(diffDays);
 
         if (diffDays > CYCLE_SIZE) {
-            iniCal.add(Calendar.MONTH, (diffDays/CYCLE_SIZE));
+            System.out.println("diffDays/CYCLE_SIZE=" + diffDays / CYCLE_SIZE);
+            System.out.println("(diffDays/CYCLE_SIZE)%12=" + (diffDays / CYCLE_SIZE) % 12);
+            iniCal.add(Calendar.MONTH, ((diffDays / CYCLE_SIZE) % 12));
             int tmpMonth = iniCal.get(Calendar.MONTH);
             System.out.println("tmpMonth=" + tmpMonth);
         }
@@ -51,15 +55,24 @@ public class ClientBilling {
         int yearIni = iniCal.get(Calendar.YEAR);
         int yearQry = qryCal.get(Calendar.YEAR);
 
-        int yearDiff = Math.abs(yearQry - yearIni);
-        if (yearDiff > 0) {
-            yearDiff *= 365;
-        }
-
         int dayIni = iniCal.get(Calendar.DAY_OF_YEAR);
         int dayQry = qryCal.get(Calendar.DAY_OF_YEAR);
 
-        return Math.abs(dayIni - dayQry) + yearDiff;
+        int days = Math.abs(dayIni - dayQry);
+
+        int yearDiff = Math.abs(yearQry - yearIni);
+        if (yearDiff > 0) {
+            yearDiff *= 365;
+
+            if (dayIni < dayQry) {
+                days += yearDiff;
+            } else {
+                days = yearDiff - days;
+            }
+        }
+        System.out.println("dayIni - dayQry" + dayIni + " " + dayQry);
+
+        return days;
     }
 
     /**
