@@ -162,4 +162,28 @@ public class ClientBillingTest {
         assertEquals(expResult.getEnd(), result.getEnd());
     }
     
+    /**
+     * Given a date 
+     * When it is after one month 
+     *      AND initial date is in February 
+     *      AND non leap year
+     *      AND query date is greater than 30 days in difference
+     * Then return a billing cycle
+     */
+    @Test
+    public void testBillingCycleAfterOneMonthStartingAtFebruaryNonLeapQryGT30() throws ParseException {
+        System.out.println("testBillingCycleAfterTwoMonthsStartingAtFebruaryNonLeapQryGT30");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("29-03-2018");
+        Date initial = sdf.parse("15-02-2018");
+        Date start = sdf.parse("15-03-2018");
+        Date end = sdf.parse("14-04-2018");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
+    
+    
 }
