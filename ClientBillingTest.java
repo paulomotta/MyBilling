@@ -1,7 +1,5 @@
 package my.billing;
 
-import my.billing.ClientBilling;
-import my.billing.BillingCycle;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,8 +55,28 @@ public class ClientBillingTest {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Date queryDate = sdf.parse("05-06-2018");
         Date initial = sdf.parse("15-03-2018");
-        Date start = sdf.parse("15-06-2018");
-        Date end = sdf.parse("15-07-2018");
+        Date start = sdf.parse("15-05-2018");
+        Date end = sdf.parse("14-06-2018");
+        ClientBilling instance = new ClientBilling(initial);
+        BillingCycle expResult = new BillingCycle(start, end);
+        BillingCycle result = instance.getBillingCycle(queryDate);
+        assertEquals(expResult.getStart(), result.getStart());
+        assertEquals(expResult.getEnd(), result.getEnd());
+    }
+    
+    /**
+     * Given a date 
+     * When it is after five months
+     * Then return a billing cycle
+     */
+    @Test
+    public void testBillingCycleAfterFiveMonths() throws ParseException {
+        System.out.println("testBillingCycleAfterThreeMonths");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date queryDate = sdf.parse("05-08-2018");
+        Date initial = sdf.parse("15-03-2018");
+        Date start = sdf.parse("15-07-2018");
+        Date end = sdf.parse("14-08-2018");
         ClientBilling instance = new ClientBilling(initial);
         BillingCycle expResult = new BillingCycle(start, end);
         BillingCycle result = instance.getBillingCycle(queryDate);

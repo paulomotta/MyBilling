@@ -40,7 +40,9 @@ public class ClientBilling {
         System.out.println(diffDays);
 
         if (diffDays > 30) {
-            iniCal.add(Calendar.MONTH, (qryMonth - iniMonth));
+            iniCal.add(Calendar.MONTH, (diffDays/30));
+            int tmpMonth = iniCal.get(Calendar.MONTH);
+            System.out.println("tmpMonth=" + tmpMonth);
         }
         Date ini = iniCal.getTime();
 
